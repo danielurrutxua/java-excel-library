@@ -1,16 +1,13 @@
-package org.example.features.builder.stages;
+package org.example.features.builder;
 
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.example.features.builder.ExcelBuilder;
-import org.example.features.builder.stages.exceptions.ErrorMessages;
-import org.example.features.builder.stages.exceptions.ExcelBuilderException;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-public class SheetsStage extends ExcelBuilder {
+ class SheetsStage extends ExcelBuilder {
 
 
     public static DataModelStage createSheet(String sheetName) {

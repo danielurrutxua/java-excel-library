@@ -1,11 +1,8 @@
-package org.example.features.builder.stages;
+package org.example.features.builder;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
-import org.example.features.builder.ExcelBuilder;
-import org.example.features.builder.stages.exceptions.ErrorMessages;
-import org.example.features.builder.stages.exceptions.ExcelBuilderException;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Member;
@@ -14,8 +11,7 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-
-public class DataModelStage extends ExcelBuilder {
+ class DataModelStage extends ExcelBuilder {
 
     public <T> SheetsStage setData(List<T> dataList) {
         if (dataList == null || dataList.isEmpty()) {
