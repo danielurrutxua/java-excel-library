@@ -17,7 +17,7 @@ publishing {
         maven {
             url = uri("https://maven.pkg.github.com/danielurrutxua/java-excel-library")
             credentials {
-                username = danielurrutxua
+                username = "danielurrutxua"
                 password = System.getenv("GPR_KEY") ?: project.findProperty("gpr.key")
             }
         }
