@@ -9,6 +9,12 @@
 
 name: Publish package to GitHub Packages
 on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
   release:
     types: [created]
 jobs:
