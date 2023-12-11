@@ -2,7 +2,7 @@ plugins {
     id 'java'
 }
 
-group 'org.pie'
+group 'org.lemon.pie'
 version '1.0'
 
 repositories {
