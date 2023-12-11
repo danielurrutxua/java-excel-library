@@ -12,7 +12,7 @@ publishing {
         mavenJava(MavenPublication) {
             from components.java
             groupId = 'com.github.danielurrutxua'
-            artifactId = 'OpenXLSX'
+            artifactId = 'open-xlsx'
             version = '1.0.0'
         }
     }
