@@ -4,21 +4,17 @@ plugins {
 }
 
 
-group 'com.github.danielurrutxua'
+group 'com.lemon.pie'
 version '1.0'
 
 publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            from components.java
-        }
-    }
     repositories {
         maven {
-            url = uri("https://maven.pkg.github.com/danielurrutxua/java-excel-library")
+            name= "GitHubPackages"
+            url = "https://maven.pkg.github.com/danielurrutxua/java-excel-library"
             credentials {
-                username = "danielurrutxua"
-                password = System.getenv("GPR_KEY") ?: project.findProperty("gpr.key")
+                username = System.getenv("GITHUB_ACTOR")
+                password = System.getenv("GITHUB_TOKEN")
             }
         }
     }
