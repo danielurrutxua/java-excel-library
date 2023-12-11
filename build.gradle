@@ -2,11 +2,19 @@ plugins {
     id 'java'
 }
 
-group 'org.example'
-version '1.0-SNAPSHOT'
+group 'org.pie'
+version '1.0'
 
 repositories {
     mavenCentral()
+
+    maven {
+        url = uri("https://maven.pkg.github.com/danielurrutxua/java-excel-library")
+        credentials {
+            username = System.getenv("GPR_USER") ?: project.findProperty("gpr.user")
+            password = System.getenv("GPR_KEY") ?: project.findProperty("gpr.key")
+        }
+    }
 }
 
 sourceCompatibility = '1.8'
@@ -14,7 +22,7 @@ sourceCompatibility = '1.8'
 dependencies {
     // https://mvnrepository.com/artifact/org.apache.poi/poi
     implementation('org.apache.poi:poi:5.2.2')
-    implementation "org.apache.poi:poi-ooxml:5.2.0"
+    implementation 'org.apache.poi:poi-ooxml:5.2.2'
 
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
