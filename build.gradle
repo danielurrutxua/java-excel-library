@@ -8,6 +8,14 @@ group 'com.lemon.pie'
 version '1.0'
 
 publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+            groupId = 'com.github.danielurrutxua'
+            artifactId = 'OpenXLSX'
+            version = '1.0.0'
+        }
+    }
     repositories {
         maven {
             name= "GitHubPackages"
