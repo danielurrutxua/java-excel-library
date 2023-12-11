@@ -3,15 +3,22 @@ package org.example.features.builder;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
+import org.example.features.builder.annotations.OpenXLSXColumn;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Member;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
- class DataModelStage extends ExcelBuilder {
+import java.util.stream.IntStream;
+
+public class DataModelStage {
+
+    private final OpenXLSX openXLSX;
+
+    public DataModelStage(OpenXLSX openXLSX) {
+        this.openXLSX = openXLSX;
+    }
 
     public <T> SheetsStage setData(List<T> dataList) {
         if (dataList == null || dataList.isEmpty()) {
@@ -30,12 +37,12 @@ import java.util.List;
             addRowContent(dataItem);
         }
 
-        return new SheetsStage();
+        return new SheetsStage(openXLSX);
     }
 
     private <T> void addRowContent(T dataItem) {
 
-        Sheet sheet = workbook.getSheetAt(currentSheetIndex);
+        Sheet sheet = openXLSX.getWorkbook().getSheetAt(openXLSX.getCurrentSheetIndex());
         Row row = sheet.createRow(sheet.getLastRowNum() + 1);
         Field[] fields = dataItem.getClass().getDeclaredFields();
         try {
@@ -52,40 +59,38 @@ import java.util.List;
     }
 
     private void setCellValue(Cell cell, Object value) {
-        if (value instanceof Integer integer) {
-            cell.setCellValue(integer);
-        } else if (value instanceof Float floatVal) {
-            cell.setCellValue(floatVal);
-        } else if (value instanceof Double doubleVal) {
-            cell.setCellValue(doubleVal);
-        } else if (value instanceof Long longVal) {
-            cell.setCellValue(longVal);
-        } else if (value instanceof String stringVal) {
-            cell.setCellValue(stringVal);
-        } else if (value instanceof Boolean booleanVal) {
-            cell.setCellValue(Boolean.TRUE.equals(booleanVal) ? 1 : 0);
-        } else if (value instanceof Date dateVal) {
-            cell.setCellValue(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(dateVal));
-        } else if (value instanceof BigDecimal bigDecimalVal) {
-            cell.setCellValue(bigDecimalVal.doubleValue());
-        } else if (value instanceof Enum<?> enumVal) {
-            cell.setCellValue(enumVal.name());
+        if (value instanceof Integer) {
+            cell.setCellValue((Integer) value);
+        } else if (value instanceof Float) {
+            cell.setCellValue((Float) value);
+        } else if (value instanceof Double) {
+            cell.setCellValue((Double) value);
+        } else if (value instanceof Long) {
+            cell.setCellValue((Long) value);
+        } else if (value instanceof String) {
+            cell.setCellValue((String) value);
+        } else if (value instanceof Boolean) {
+            cell.setCellValue(Boolean.TRUE.equals(value) ? 1 : 0);
+        } else if (value instanceof Date) {
+            cell.setCellValue(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format((Date) value));
+        } else if (value instanceof BigDecimal) {
+            cell.setCellValue(((BigDecimal) value).doubleValue());
+        } else if (value instanceof Enum) {
+            cell.setCellValue(((Enum<?>) value).name());
         } else {
             cell.setCellValue(value.toString());
         }
     }
 
     private void setHeader(Field[] declaredFields) {
-        List<String> header = Arrays.stream(declaredFields).map(Member::getName).toList();
+        Row headerRow = openXLSX.getWorkbook().getSheetAt(openXLSX.getCurrentSheetIndex()).createRow(0);
 
-        // Crear una fila en la hoja para los encabezados
-        Row headerRow = workbook.getSheetAt(currentSheetIndex).createRow(0); // La fila de encabezado suele ser la primera
-
-        // Rellenar la fila con los nombres de los campos
-        for (int i = 0; i < header.size(); i++) {
+        IntStream.range(0, declaredFields.length).forEach(i -> {
             Cell cell = headerRow.createCell(i);
-            cell.setCellValue(header.get(i));
-        }
-
+            OpenXLSXColumn column = declaredFields[i].getAnnotation(OpenXLSXColumn.class);
+            String headerName = column != null ? column.name() : declaredFields[i].getName();
+            cell.setCellValue(headerName);
+        });
     }
+
 }

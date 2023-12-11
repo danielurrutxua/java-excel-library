@@ -1,63 +1,55 @@
 package org.example.features.builder;
 
 import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
- class SheetsStage extends ExcelBuilder {
+public class SheetsStage {
 
+    private final OpenXLSX openXLSX;
 
-    public static DataModelStage createSheet(String sheetName) {
-        Sheet sheet = workbook.createSheet(sheetName);
-        currentSheetIndex = workbook.getSheetIndex(sheet);
-        return new DataModelStage();
+    public SheetsStage(OpenXLSX openXLSX) {
+        this.openXLSX = openXLSX;
+    }
+
+    public DataModelStage createSheet(String sheetName) {
+        Sheet sheet = openXLSX.getWorkbook().createSheet(sheetName);
+        openXLSX.setCurrentSheetIndex(openXLSX.getWorkbook().getSheetIndex(sheet));
+        return new DataModelStage(openXLSX);
+    }
+
+    public DataModelStage createSheet() {
+        Sheet sheet = openXLSX.getWorkbook().createSheet();
+        openXLSX.setCurrentSheetIndex(openXLSX.getWorkbook().getSheetIndex(sheet));
+        return new DataModelStage(openXLSX);
     }
 
     public SheetsStage deleteSheet(String sheetName) {
-        workbook.removeSheetAt(workbook.getSheetIndex(workbook.getSheet(sheetName)));
+        openXLSX.getWorkbook().removeSheetAt(openXLSX.getWorkbook().getSheetIndex(openXLSX.getWorkbook().getSheet(sheetName)));
         return this;
     }
 
     public SheetsStage deleteSheet(int index) {
-        workbook.removeSheetAt(index);
+        openXLSX.getWorkbook().removeSheetAt(index);
         return this;
     }
 
-    public Workbook getWorkbook() {
-        return workbook;
-    }
-
     public File generateOutputFileFromSheet() {
-        // Utiliza un nombre de archivo basado en un prefijo y un sufijo
-        String tempFileName = fileName + "_" + System.currentTimeMillis();
+        FileOutputStream outputStream;
+        String tempFileName = openXLSX.getFileName() + "_" + System.currentTimeMillis();
         File file;
-
         try {
             file = File.createTempFile(tempFileName, ".xlsx");
-
-            // Uso de try-with-resources para asegurarse de que outputStream se cierra correctamente
-            try (FileOutputStream outputStream = new FileOutputStream(file)) {
-                workbook.write(outputStream);
-            }
+            outputStream = new FileOutputStream(file);
+            openXLSX.getWorkbook().write(outputStream);
+            openXLSX.getWorkbook().close();
         } catch (IOException e) {
             throw new ExcelBuilderException(ErrorMessages.OUTPUT_FILE_ERROR + e.getMessage());
-        } finally {
-            // Cierra el workbook si está abierto
-            if (workbook != null) {
-                try {
-                    workbook.close();
-                } catch (IOException e) {
-                    // Considera registrar este error o lanzar una excepción, dependiendo de tu estrategia de manejo de errores
-                }
-            }
         }
-
         return file;
     }
-
 
 
 }
