@@ -4,7 +4,7 @@ plugins {
 }
 
 
-group 'org.lemon.pie'
+group 'com.github.danielurrutxua'
 version '1.0'
 
 publishing {
