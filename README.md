@@ -19,8 +19,8 @@ repositories {
     mavenCentral()
     maven { url 'https://maven.pkg.github.com/danielurrutxua/java-excel-library' }
     credentials {
-                username = <YOUR_GITHUB_USERNAME>
-                password = <YOUR_GITHUB_PASSWORD>
+                username = "YOUR_GITHUB_USERNAME"
+                password = "YOUR_GITHUB_PASSWORD"
     }
 
 }
@@ -75,7 +75,7 @@ public class ExcelUsageExample {
         OpenXLSX excelBuilder = new OpenXLSX();
 
         // Initialize workbook
-        excelbuilder.initWorkbook("summary_2023")
+        excelbuilder.initWorkbook("summary_2023");
 
         // Create a new sheet with a name
         excelBuilder.createSheet("Employee Data");
@@ -124,23 +124,10 @@ public class Employee {
 }
 ```
 
-### Example
-```java
-import com.github.danielurrutxua.openxlsx.annotations.OpenXLSXColumn;
+### Output
 
-public class Employee {
-    @OpenXLSXColumn(name = "ID")
-    private long id;
+Generated file `summary_2023.xlsx`
 
-    @OpenXLSXColumn(name = "First Name")
-    private String firstName;
+![Screenshot of the file](images/summary_2023_readme.png)
 
-    @OpenXLSXColumn(name = "Last Name")
-    private String lastName;
 
-    @OpenXLSXColumn(name = "Department")
-    private String department;
-
-    // Standard constructors, getters and setters below...
-}
-```
