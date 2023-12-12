@@ -59,7 +59,10 @@ public class DataModelStage {
     }
 
     private void setCellValue(Cell cell, Object value) {
-        if (value instanceof Integer) {
+        if(value == null){
+            cell.setBlank();
+        }
+        else if (value instanceof Integer) {
             cell.setCellValue((Integer) value);
         } else if (value instanceof Float) {
             cell.setCellValue((Float) value);
